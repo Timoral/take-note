@@ -1,0 +1,28 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+    
+    <!-- General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_dark_theme">Dark Theme</string>
+    <string name="pref_summary_off_dark_theme">Switch application theme to a dark variant.</string>
+    <string name="pref_summary_on_dark_theme">Switch application theme to a light variant.</string>
+
+
+    <!-- Sorting -->
+    <string name="pref_header_sorting">Sorting</string>
+
+    <string name="pref_title_note_sorting">Note Sorting</string>
+    <string name="pref_summary_note_sorting">Order of notes</string>
+
+    <!-- Reset settings -->
+    <string name="pref_header_reset">Reset Application</string>
+
+    <string name="pref_title_reset">Reset to Defaults</string>
+    <string name="pref_summary_reset">Return to default settings.</string>
+    <string name="pref_title_clear">Clear Notes</string>
+    <string name="pref_summary_clear">Wipe database of all notes.</string>
+    <string name="pref_title_clear_all">Clear All</string>
+    <string name="pref_summary_clear_all">Wipe Everything.</string>
+
+</resources>

@@ -1,0 +1,7 @@
+1.1
+Fixed some layout and font inconsistencies
+Added grid layout for landscape and larger devices
+Added animations and transisions	
+Fixed rotation issue
+Support for Android 3.1 and up (API 12)
+Fixed title being able to be endless

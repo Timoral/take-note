@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Take Note</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_checklists">Checklists</string>
+
+    <string name="name_notes">Notes</string>
+    <string name="name_note">Note</string>
+    <string name="name_checklists">Checklists</string>
+    <string name="name_checklist">Checklist</string>
+
+    <string name="prefs_note_first_launch">note_first_launch</string>
+    <string name="prefs_checklist_first_launch">checklist_first_launch</string>
+
+    <string name="hint_add">Add Note..</string>
+    <string name="hint_title">Title..</string>
+    <string name="hint_content">Content..</string>
+
+    <string name="text_add">Add</string>
+    <string name="text_edit">Save</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_delete">Delete</string>
+    <string name="text_confirm">Are You Sure?</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
+    <string name="text_empty_title">No Title</string>
+    <string name="text_empty_content">No Content</string>
+    <string name="text_empty_confirm">Add anyway?</string>
+
+    <string name="desc_voice">Voice</string>
+    <string name="desc_edit">Edit</string>
+    <string name="desc_delete">Delete</string>
+
+    <string name="welcome_note_title">Take Note</string>
+    <string name="welcome_note_content">Thank you for installing Take Note. This is how a note will look like. Tap to edit or delete this or any other note. To add another, simply tap on the text box above or click on the voice icon to dictate your note.</string>
+    <string name="welcome_checklist_title">A Checklist.</string>
+    <string name="welcome_checklist_content">This is a checklist.</string>
+
+    <string name="speech_prompt">Say something&#8230;</string>
+    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input.</string>
+    <string name="tap_on_mic">Tap on mic to speak.</string>
+    <string name="title_activity_note">NoteActivity</string>
+
+
+</resources>

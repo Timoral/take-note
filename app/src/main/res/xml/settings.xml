@@ -1,0 +1,35 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_header_general">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="dark_theme"
+            android:summaryOff="@string/pref_summary_off_dark_theme"
+            android:summaryOn="@string/pref_summary_off_dark_theme"
+            android:title="@string/pref_title_dark_theme" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_header_sorting">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/sorting_notes"
+            android:entryValues="@array/sorting_notes_values"
+            android:key="note_sorting"
+            android:title="@string/pref_title_note_sorting"
+            android:summary="@string/pref_summary_note_sorting" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_reset">
+        <Preference
+            android:key="reset"
+            android:summary="@string/pref_summary_reset"
+            android:title="@string/pref_title_reset" />
+        <Preference
+            android:key="clear"
+            android:summary="@string/pref_summary_clear"
+            android:title="@string/pref_title_clear" />
+        <Preference
+            android:key="clear_all"
+            android:summary="@string/pref_summary_clear_all"
+            android:title="@string/pref_title_clear_all" />
+    </PreferenceCategory>
+</PreferenceScreen>

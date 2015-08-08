@@ -1,0 +1,12 @@
+    // Implement OnLongClick listener. Long Clicked items is removed from list.
+    @Override
+    public boolean onLongClick(View view) {
+        ViewHolder holder = (ViewHolder) view.getTag();
+        if (view.getId() == holder.mNameTextView.getId()) {
+            /// REMOVES ITEM
+            //mDataset.remove(holder.getPosition());
+            // Call this method to refresh the list and display the "updated" list
+            //notifyDataSetChanged();
+        }
+        return false;
+    }

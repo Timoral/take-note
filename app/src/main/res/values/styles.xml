@@ -1,0 +1,65 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <attr name="cardStyle" format="reference" />
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" tools:ignore="NewApi">
+        <item name="colorPrimary">@color/grey_900</item>
+        <item name="colorAccent">@color/grey_500</item>
+        <item name="android:buttonStyle">@style/buttonStyle</item>
+        <item name="cardStyle">@style/CardView.Light</item>
+        <item name="popupTheme">@style/Theme.AppCompat.Light</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- enable overlapping of exiting and entering activities-->
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+    </style>
+
+    <style name="AppThemeDark" parent="Theme.AppCompat" tools:ignore="NewApi">
+        <item name="colorPrimary">@color/grey_900</item>
+        <item name="colorAccent">@color/grey_500</item>
+        <item name="android:buttonStyle">@style/buttonStyle</item>
+        <item name="cardStyle">@style/CardView.Dark</item>
+        <item name="popupTheme">@style/Theme.AppCompat</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- enable overlapping of exiting and entering activities-->
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+
+        <item name="android:windowEnterTransition">@transition/transition_fade</item>
+        <item name="android:windowExitTransition">@transition/transition_fade</item>
+    </style>
+
+    <style name="CardView.Light" parent="CardView">
+        <item name="cardBackgroundColor">@color/cardview_light_background</item>
+    </style>
+
+    <style name="CardView.Dark" parent="CardView">
+        <item name="cardBackgroundColor">@color/grey_800</item>
+    </style>
+
+    <style name="textAppearanceLarge" parent="@android:style/TextAppearance.Large">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="textAppearanceMedium" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="textAppearanceSmall" parent="@android:style/TextAppearance.Small">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="buttonStyle" parent="AppTheme">
+        <item name="android:textColor">@color/grey_500</item>
+        <item name="android:textAppearance">?android:attr/borderlessButtonStyle</item>
+    </style>
+</resources>
