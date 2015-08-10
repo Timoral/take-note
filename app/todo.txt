@@ -2,4 +2,3 @@ Checklists
 Groups
 Take a note
 Screenshots on 10' & 7' emulators
-Input filter on Title
