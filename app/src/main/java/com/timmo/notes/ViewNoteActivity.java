@@ -11,7 +11,6 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +22,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.commons.lang.WordUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,6 +47,27 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
     private SharedPreferences sharedPreferences;
     // endregion
 
+    //region capitalizeString
+    public static String capitalizeFirstLetter(String capitalize) {
+        return WordUtils.capitalize(capitalize);
+    }
+
+    public static String capitalizeWords(String capitalize) {
+
+        String[] words = capitalize.split(" ");
+        StringBuilder sb = new StringBuilder();
+        if (words[0].length() > 0) {
+            sb.append(Character.toUpperCase(words[0].charAt(0))).append(words[0].subSequence(1, words[0].length()).toString().toLowerCase());
+            for (int i = 1; i < words.length; i++) {
+                sb.append(" ");
+                sb.append(Character.toUpperCase(words[i].charAt(0))).append(words[i].subSequence(1, words[i].length()).toString().toLowerCase());
+            }
+        }
+
+        return sb.toString();
+    }
+    // endregion
+
     // region onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +82,10 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_view_note);
 
         identifier = getIntent().getExtras().getInt("note_id");
-        String title = getIntent().getExtras().getString("note_title");
-        String content = getIntent().getExtras().getString("note_content");
-        String metadata = getIntent().getExtras().getString("note_metadata");
+        int notePosition = getIntent().getExtras().getInt("note_pos");
 
         // startActivityForResult() workaround
-        sharedPreferences.edit().putInt("returning_id", identifier).apply();
+        sharedPreferences.edit().putInt("returning_id", notePosition).apply();
 
         animationFadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in);
         animationFadeOut = AnimationUtils.loadAnimation(this, R.anim.anim_fade_out);
@@ -83,12 +103,14 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
         Button buttonCancel = (Button) findViewById(R.id.buttonCancel);
         Button buttonSave = (Button) findViewById(R.id.buttonSave);
 
-        textViewTitle.setText(title);
-        textViewContent.setText(content);
-        textViewMetadata.setText(metadata);
-
         db = new NotesDatabaseHandler(ViewNoteActivity.this);
         notes = db.getAllNotes();
+
+        Note note = db.getNote(identifier);
+
+        textViewTitle.setText(note.getTitle());
+        textViewContent.setText(note.getContent());
+        textViewMetadata.setText(note.getMetadata());
 
         ImageButton imageButtonEdit = (ImageButton) findViewById(R.id.imageButtonEdit);
         ImageButton imageButtonDelete = (ImageButton) findViewById(R.id.imageButtonDelete);
@@ -103,7 +125,6 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
         buttonSave.setOnClickListener(this);
 
     }
-    // endregion
 
     // region Menu
     @Override
@@ -111,6 +132,7 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
         getMenuInflater().inflate(R.menu.menu_note, menu);
         return true;
     }
+    // endregion
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -252,11 +274,9 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
                         //int id = db.getNotesCount() + 1;
                         //db.addNote(new Note(identifier, editTextTitle.getText().toString(), editTextContent.getText().toString(), "Updated on: " + printStandardDate()));
                         //db.updateNote(notes.set(identifier, new Note(identifier, editTextTitle.getText().toString(), editTextContent.getText().toString(), "Updated on: " + printStandardDate())));
-                        // TODO http://stackoverflow.com/questions/31887722/update-sqlite-database
-                        db.updateNote(new Note(7, editTextTitle.getText().toString(),
+                        db.updateNote(new Note(identifier, editTextTitle.getText().toString(),
                                 editTextContent.getText().toString(),
                                 "Updated on: " + printStandardDate()));
-                        //db.updateNote(identifier, editTextTitle.getText().toString(), editTextContent.getText().toString(), "Updated on: " + printStandardDate());
 
                         sharedPreferences.edit().putString("return_callback", "edited").apply();
 
@@ -300,7 +320,7 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
 //        }
 
     }
-    // endregion
+    //endregion
 
     // region Speech to Text
     private void promptSpeechInput() {
@@ -325,18 +345,16 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     if (whichHasFocus.equals("title")) {
-                        editTextTitle.append(result.get(0));
-                        editTextContent.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+                        editTextTitle.append(capitalizeWords(result.get(0)));
                     } else if (whichHasFocus.equals("content")) {
-                        editTextContent.append(result.get(0));
-                        editTextContent.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                        editTextContent.append(capitalizeFirstLetter(result.get(0)));
                     }
                 }
                 break;
             }
         }
     }
-    // endregion
+    //endregion
 
     // region printStandardDate
     private String printStandardDate() {

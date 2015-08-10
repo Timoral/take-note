@@ -50,7 +50,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         //setAnimation(holder.cardViewNote, position);
 
-        holder.textViewTitle.setText("ID=" + dID.get(position) + ", Title=" + dTitle.get(position));
+        holder.textViewTitle.setText(dTitle.get(position));
         holder.textViewContent.setText(dContent.get(position));
         holder.textViewMetadata.setText(dMetadata.get(position));
 
@@ -66,10 +66,11 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(sContext, ViewNoteActivity.class);
-                intent.putExtra("note_id", position);
-                intent.putExtra("note_title", dTitle.get(position));
-                intent.putExtra("note_content", dContent.get(position));
-                intent.putExtra("note_metadata", dMetadata.get(position));
+                intent.putExtra("note_id", dID.get(position));
+                intent.putExtra("note_pos", position);
+                //intent.putExtra("note_title", dTitle.get(position));
+                //intent.putExtra("note_content", dContent.get(position));
+                //intent.putExtra("note_metadata", dMetadata.get(position));
 
                 if (Build.VERSION.SDK_INT >= 21) {
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation

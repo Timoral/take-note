@@ -1,7 +1,14 @@
+1.2
+You can now use Google Now to create notes (see description or in app for details)
+You can now export notes table to sdcard
+
 1.1
+WARNING: Any existing notes will be lost in this version!
 Fixed some layout and font inconsistencies
 Added grid layout for landscape and larger devices
-Added animations and transisions	
+Added animations and transisions
 Fixed rotation issue
 Support for Android 3.1 and up (API 12)
 Fixed title being able to be endless
+You can now sort your notes in settings
+
