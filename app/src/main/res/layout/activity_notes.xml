@@ -51,6 +51,7 @@
                     android:fontFamily="sans-serif-condensed"
                     android:hint="@string/hint_add"
                     android:inputType="textCapWords"
+                    android:maxLength="50"
                     android:singleLine="true"
                     android:textStyle="italic"
                     tools:ignore="UnusedAttribute" />

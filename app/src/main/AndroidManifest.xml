@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.timmo.notes">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:configChanges="orientation|keyboardHidden"
@@ -11,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
+
         <activity
             android:name=".NotesActivity"
             android:label="@string/app_name">
@@ -21,19 +24,20 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+                <action android:name="com.google.android.gm.action.AUTO_SEND" />
+                <action android:name="com.google.android.voicesearch.action.AUTO_SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.google.android.voicesearch.SELF_NOTE" />
 
-                <data android:mimeType="text/plain" />
+                <data android:mimeType="text/*" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".NotesActivity"
-            tools:ignore="UnusedAttribute">
-        </activity>
+            tools:ignore="UnusedAttribute" />
         <activity
             android:name=".ViewNoteActivity"
             android:label="@string/name_note"

@@ -14,10 +14,15 @@
             android:entries="@array/sorting_notes"
             android:entryValues="@array/sorting_notes_values"
             android:key="note_sorting"
-            android:title="@string/pref_title_note_sorting"
-            android:summary="@string/pref_summary_note_sorting" />
+            android:summary="@string/pref_summary_note_sorting"
+            android:title="@string/pref_title_note_sorting" />
     </PreferenceCategory>
-
+    <PreferenceCategory android:title="@string/pref_header_export">
+        <Preference
+            android:key="notes_export"
+            android:summary="@string/pref_summary_notes_export"
+            android:title="@string/pref_title_notes_export" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_reset">
         <Preference
             android:key="reset"

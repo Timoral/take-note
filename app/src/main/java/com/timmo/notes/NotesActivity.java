@@ -1,6 +1,5 @@
 package com.timmo.notes;
 
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +16,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,9 +31,10 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 
 public class NotesActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
     // region Global Vars
@@ -48,6 +47,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     private EditText editTextTitle, editTextContent;
     private ScrollView scrollViewAddContent;
     private CardView cardViewAdd;
+    private ImageButton imageButtonVoice;
     private ArrayList<Integer> arrayListID;
     private ArrayList<String> arrayListTitle, arrayListContent, arrayListMetadata;
     private GridLayoutManager gridLayoutManager;
@@ -127,7 +127,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
 
         scrollViewAddContent = (ScrollView) findViewById(R.id.scrollViewAddContent);
         cardViewAdd = (CardView) findViewById(R.id.cardViewAdd);
-        ImageButton imageButtonVoice = (ImageButton) findViewById(R.id.imageButtonVoice);
+        imageButtonVoice = (ImageButton) findViewById(R.id.imageButtonVoice);
         Button buttonAdd = (Button) findViewById(R.id.buttonAdd);
         Button buttonCancel = (Button) findViewById(R.id.buttonCancel);
         editTextTitle = (EditText) findViewById(R.id.editTextTitle);
@@ -172,13 +172,11 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
                 showViews();
             }
         });
-/*
         recyclerView.setItemAnimator(new FadeInUpAnimator());
         recyclerView.getItemAnimator().setAddDuration(500);
         recyclerView.getItemAnimator().setRemoveDuration(500);
         recyclerView.getItemAnimator().setMoveDuration(500);
         recyclerView.getItemAnimator().setChangeDuration(500);
-*/
 
         // region First Launch
         SharedPreferences sharedPreferencesFirst = getSharedPreferences("PREFS_FIRST_LAUNCH", 0);
@@ -187,22 +185,48 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
 //            db.addNote(new Note(id, resources.getString(R.string.welcome_note_title),
 //                    resources.getString(R.string.welcome_note_content),
 //                    "Added on: " + printStandardDate()));
-            AddNote(0, resources.getString(R.string.welcome_note_title), resources.getString(R.string.welcome_note_content));
+            AddNote(resources.getString(R.string.welcome_note_title), resources.getString(R.string.welcome_note_content));
             sharedPreferencesFirst.edit().putBoolean(resources.getString(R.string.prefs_note_first_launch), false).apply();
         }
         // endregion
 
         // Google Now
         //TODO GOOGLE NOW!!!
+/*
         Intent intent = getIntent();
         if (Intent.ACTION_SEND.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            editTextTitle.setText(query);
-            editTextContent.requestFocus();
+            editTextContent.setText(query);
+            editTextTitle.requestFocus();
+        }
+*/
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        // Google Now
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                if (sharedText != null) {
+                    editTextContent.setText(sharedText);
+                    editTextTitle.requestFocus();
+                    imageButtonVoice.performClick();
+                }
+            }
+        } else {
+            if (("com.google.android.gm.action.AUTO_SEND").equals(action) && type != null) {
+                String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                if (sharedText != null) {
+                    editTextContent.setText(sharedText);
+                    editTextTitle.requestFocus();
+                    imageButtonVoice.performClick();
+                }
+            }
         }
 
         intent.getExtras();
-        int backToID = intent.getIntExtra("returning_id", getNotesCount());
+        int backToID = intent.getIntExtra("returning_id", 0);
         if (backToID < 0) {
             backToID = 0;
         }
@@ -239,7 +263,6 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     // endregion
 
     // region Speech to Text
-
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -265,6 +288,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
                         editTextContent.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                         editTextTitle.append(result.get(0));
                         editTextContent.requestFocus();
+                        imageButtonVoice.performClick();
                     } else if (whichHasFocus.equals("content")) {
                         editTextContent.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                         editTextContent.append(result.get(0));
@@ -299,12 +323,12 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
                             .alpha(1.0f);
 
                     //recyclerView.setPadding(0, linearLayoutAdd.getHeight() + recyclerView.getPaddingTop() + 80, 0, 0);
-                    gridLayoutManager.smoothScrollToPosition(recyclerView, null, getNotesCount());
+                    //gridLayoutManager.smoothScrollToPosition(recyclerView, null, getNotesCount());
                 } else {
                     editTextTitle.setHint(resources.getString(R.string.hint_title));
                     scrollViewAddContent.setVisibility(View.GONE);
                     //recyclerView.setPadding(0, 210, 0, 0);
-                    gridLayoutManager.smoothScrollToPosition(recyclerView, null, getNotesCount());
+                    //gridLayoutManager.smoothScrollToPosition(recyclerView, null, getNotesCount());
                 }
                 break;
             case R.id.editTextContent:
@@ -354,7 +378,8 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
 
                     builder.setPositiveButton(R.string.text_yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            AddNote(getNotesCount(), editTextTitle.getText().toString(), editTextContent.getText().toString());
+                            AddNote(editTextTitle.getText().toString(),
+                                    editTextContent.getText().toString());
                         }
                     });
                     builder.setNegativeButton(R.string.text_no, new DialogInterface.OnClickListener() {
@@ -369,7 +394,8 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
 
                     builder.setPositiveButton(R.string.text_yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            AddNote(getNotesCount(), editTextTitle.getText().toString(), editTextContent.getText().toString());
+                            AddNote(editTextTitle.getText().toString(),
+                                    editTextContent.getText().toString());
                         }
                     });
                     builder.setNegativeButton(R.string.text_no, new DialogInterface.OnClickListener() {
@@ -379,7 +405,8 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 } else {
-                    AddNote(getNotesCount(), editTextTitle.getText().toString(), editTextContent.getText().toString());
+                    AddNote(editTextTitle.getText().toString(),
+                            editTextContent.getText().toString());
                 }
                 break;
         }
@@ -390,7 +417,6 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        LoadNotes();
         String returnTo = sharedPreferences.getString("return_callback", "nothing");
         if (returnTo.equals("edited")) {
             //adapter.notifyItemRemoved(sharedPreferences.getInt("returning_id", 0));
@@ -400,6 +426,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         } else if (returnTo.equals("deleted")) {
             adapter.notifyItemRemoved(sharedPreferences.getInt("returning_id", getNotesCount()));
         }
+        LoadNotes();
     }
     // endregion
 
@@ -420,16 +447,16 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     // endregion
 
     // region Notes
-    private void AddNote(int newID, String newTitle, String newContent) {
+    private void AddNote(String newTitle, String newContent) {
         // Get
         String newMetadata = "Added on: " + printStandardDate();
 
         // Set
-        arrayListTitle.add(newID, newTitle);
-        arrayListContent.add(newID, newContent);
-        arrayListMetadata.add(newID, newMetadata);
-        adapter.notifyItemInserted(newID);
-        gridLayoutManager.smoothScrollToPosition(recyclerView, null, newID);
+        //arrayListTitle.add(newID, newTitle);
+        //arrayListContent.add(newID, newContent);
+        //arrayListMetadata.add(newID, newMetadata);
+        //adapter.notifyItemInserted(newID);
+        //gridLayoutManager.smoothScrollToPosition(recyclerView, null, newID);
 
         // Clear
         viewFocus = NotesActivity.this.getCurrentFocus();
@@ -446,9 +473,26 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         showViews();
 
         // Save
-        int newPermID = getNotesCount() + 1;
-        Log.d("TEST", "newPermID=" + newPermID);
+        int newPermID = db.getNotesCount() + 1;
         db.addNote(new Note(newPermID, newTitle, newContent, newMetadata));
+        LoadNotes();
+
+        //Note newNote = db.getNote(newPermID);
+
+        switch (sharedPreferences.getString("note_sorting", "0")) {
+            case "0":
+                adapter.notifyItemInserted(arrayListID.indexOf(newPermID));
+                break;
+            case "1":
+                adapter.notifyItemInserted(arrayListID.indexOf(newPermID));
+                break;
+            case "2":
+                adapter.notifyItemInserted(arrayListTitle.indexOf(newTitle));
+                break;
+            case "3":
+                adapter.notifyItemInserted(arrayListTitle.indexOf(newTitle));
+                break;
+        }
     }
 
     public void LoadNotes() {
@@ -492,7 +536,6 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         //toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         cardViewAdd.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         //mFabButton.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-
     }
     // endregion
 

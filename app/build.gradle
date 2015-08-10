@@ -15,8 +15,8 @@ android {
         applicationId "com.timmo.notes"
         minSdkVersion 12
         targetSdkVersion 22
-        versionCode 2
-        versionName '1.1'
+        versionCode 3
+        versionName '1.2'
         signingConfig signingConfigs.config
     }
     buildTypes {
@@ -34,11 +34,15 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
-    compile 'com.android.support:cardview-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.google.code.gson:gson:2.3.1'
-    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:support-v4:22.2.1'
     compile 'com.jakewharton:butterknife:5.1.1'
     compile 'jp.wasabeef:recyclerview-animators:1.2.1@aar'
+    compile ('com.turhanoz.android:reactivedirectorychooser:0.0.12@aar'){
+        transitive=true
+    }
+    compile files('libs/opencsv-3.5.jar')
 }

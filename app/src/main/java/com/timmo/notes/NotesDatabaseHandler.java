@@ -3,7 +3,6 @@ package com.timmo.notes;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -14,7 +13,6 @@ import java.util.List;
 
 class NotesDatabaseHandler extends SQLiteOpenHelper {
 
-    // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 2;
 
@@ -32,7 +30,6 @@ class NotesDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_METADATA = "metadata";
 
     private Context sContext;
-    private String order;
 
     public NotesDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -141,6 +138,7 @@ class NotesDatabaseHandler extends SQLiteOpenHelper {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(sContext);
 
+        String order;
         switch (sharedPreferences.getString("note_sorting", "0")) {
             case "0":
                 order = KEY_ID + " DESC";
@@ -148,23 +146,22 @@ class NotesDatabaseHandler extends SQLiteOpenHelper {
             case "1":
                 order = KEY_ID + " ASC";
                 break;
-            case "3":
-                order = KEY_TITLE + " DESC";
+            case "2":
+                order = KEY_TITLE + " COLLATE NOCASE DESC";
                 break;
-            case "4":
-                order = KEY_TITLE + " ASC";
+            case "3":
+                order = KEY_TITLE + " COLLATE NOCASE ASC";
                 break;
             default:
                 order = KEY_ID + " DESC";
                 break;
         }
 
-
         SQLiteDatabase db = this.getWritableDatabase();
         //Cursor cursor = db.rawQuery(selectQuery, null);
         Cursor cursor = db.query(TABLE_NOTES,
                 new String[]{KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_METADATA},
-                null, null, null, null, order + " COLLATE NOCASE", );
+                null, null, null, null, order);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
